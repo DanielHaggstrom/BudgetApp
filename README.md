@@ -10,5 +10,6 @@
 
 **Additional Functionality**
 
-- Use CardView in MainActivity to get a quick overview of the App.
-- Create stats activity.
+- Implement Material Design.
+  - Create unified app styles and themes.
+  - Enable up navigation.
