@@ -20,6 +20,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
+        mEditTransactionView = findViewById(R.id.editText);
     }
 
     public void saveToDatabase(View view) {
