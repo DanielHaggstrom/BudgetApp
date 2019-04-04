@@ -2,6 +2,7 @@ package com.daniel.bugdetapp;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 import androidx.lifecycle.LiveData;
@@ -22,6 +23,7 @@ public class TransactionRepository {
     }
 
     public void insert (Transaction transaction) {
+        Log.e("DEBUG","<----------------- Insert called");
         new insertAsyncTask(mTransactionDao).execute(transaction);
     }
 

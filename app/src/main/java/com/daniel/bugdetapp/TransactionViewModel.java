@@ -21,5 +21,5 @@ public class TransactionViewModel extends AndroidViewModel {
 
     LiveData<List<Transaction>> getAll() { return mAllTransactions; }
 
-    public void insert(Transaction transaction) { mRepository.insert(transaction); }
+    public void insert(Transaction transaction) {mRepository.insert(transaction); }
 }

@@ -13,6 +13,6 @@ public interface TransactionDAO {
     @Insert
     void insert(Transaction transaction);
 
-    @Query("SELECT * from TRANSACTIONS ORDER BY timestamp DESC")
+    @Query("SELECT * from TRANSACTIONS ORDER BY `key` DESC")
     LiveData<List<Transaction>> getAll();
 }

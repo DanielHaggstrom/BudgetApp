@@ -17,28 +17,18 @@ public class Transaction {
 
     @NonNull
     @ColumnInfo(name = "quantity")
-    private int quantity;
+    private float quantity;
 
-    @NonNull
-    @ColumnInfo(name = "timestamp")
-    private Date timestamp;
-
-    public Transaction(@NonNull int id, int quantity, Date timestamp) {
+    public Transaction(@NonNull int id, float quantity) {
         this.id = id;
         this.quantity = quantity;
-        this.timestamp = timestamp;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
-    }
-
-    @NonNull
-    public Date getTimestamp() {
-        return timestamp;
     }
 }

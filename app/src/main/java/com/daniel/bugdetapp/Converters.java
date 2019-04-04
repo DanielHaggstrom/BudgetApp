@@ -12,7 +12,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static Long dateToTimestamp(Date date) {
+    public static float dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
 }

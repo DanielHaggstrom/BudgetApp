@@ -13,8 +13,11 @@
         android:theme="@style/Theme.AppCompat"
         tools:replace="android:appComponentFactory">
         <activity
+            android:name=".HistoricalData"
+            android:label="@string/title_activity_historical_data"></activity>
+        <activity
             android:name=".NewTransactionActivity"
-            android:label="@string/title_activity_new_transaction"/>
+            android:label="@string/title_activity_new_transaction" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
