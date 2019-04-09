@@ -31,7 +31,7 @@ public class NewTransactionActivity extends AppCompatActivity {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
                     String quantity = mEditTransactionView.getText().toString();
-                    replyIntent.putExtra(EXTRA_REPLY, replyIntent);
+                    replyIntent.putExtra(EXTRA_REPLY, quantity);
                     setResult(RESULT_OK, replyIntent);
                 }
                 finish();
