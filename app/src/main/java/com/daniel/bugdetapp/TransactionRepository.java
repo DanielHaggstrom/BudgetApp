@@ -3,7 +3,6 @@ package com.daniel.bugdetapp;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import java.util.List;
 import androidx.lifecycle.LiveData;
 

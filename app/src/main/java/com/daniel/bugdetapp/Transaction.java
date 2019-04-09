@@ -1,7 +1,5 @@
 package com.daniel.bugdetapp;
 
-import java.util.Date;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,22 +11,25 @@ public class Transaction {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "key")
-    private int id;
+    private int key;
 
     @NonNull
     @ColumnInfo(name = "quantity")
     private float quantity;
 
-    public Transaction(@NonNull int id, float quantity) {
-        this.id = id;
+    public Transaction(@NonNull float quantity) {
         this.quantity = quantity;
     }
 
-    public int getId() {
-        return id;
+    public int getKey() {
+        return key;
     }
 
     public float getQuantity() {
         return quantity;
+    }
+
+    public void setKey(int key){
+        this.key = key;
     }
 }

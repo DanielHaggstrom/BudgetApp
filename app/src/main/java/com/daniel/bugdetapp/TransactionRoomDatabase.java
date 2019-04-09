@@ -1,11 +1,13 @@
 package com.daniel.bugdetapp;
 
 import android.content.Context;
-
+import android.os.AsyncTask;
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {Transaction.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
@@ -20,12 +22,42 @@ public abstract class TransactionRoomDatabase extends RoomDatabase {
             synchronized (TransactionRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TransactionRoomDatabase.class, "word_database")
+                            TransactionRoomDatabase.class, "budget_database")
                             .fallbackToDestructiveMigration()
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
+    }
+
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onOpen (@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new PopulateDbAsync(INSTANCE).execute();
+        }
+    };
+
+    /**
+     * Populate the database in the background.
+     */
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final TransactionDAO mDao;
+        float initial = 0;
+
+        PopulateDbAsync(TransactionRoomDatabase db) {
+            mDao = db.transactionDAO();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+
+            mDao.deleteAll();
+            mDao.insert(new Transaction(initial));
+            return null;
+        }
     }
 }

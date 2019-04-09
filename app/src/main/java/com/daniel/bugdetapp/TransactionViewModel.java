@@ -1,9 +1,7 @@
 package com.daniel.bugdetapp;
 
 import android.app.Application;
-
 import java.util.List;
-
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 

@@ -8,12 +8,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Launch Historical Data Activity"
+        style="@style/button_style"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/launch_historical_data_activity"
         android:onClick="onClick"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
