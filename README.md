@@ -10,6 +10,7 @@
 - Modify database to include time.
 - Establish weekly maximum.
 - Show progress bar.
+- Persist database between sessions.
 
 **Additional Functionality**
 
