@@ -6,11 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {Transaction.class}, version = 2, exportSchema = false)
-@TypeConverters({Converters.class})
 public abstract class TransactionRoomDatabase extends RoomDatabase {
 
     public abstract TransactionDAO transactionDAO();
@@ -46,7 +44,6 @@ public abstract class TransactionRoomDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TransactionDAO mDao;
-        float initial = 0;
 
         PopulateDbAsync(TransactionRoomDatabase db) {
             mDao = db.transactionDAO();
@@ -56,7 +53,6 @@ public abstract class TransactionRoomDatabase extends RoomDatabase {
         protected Void doInBackground(final Void... params) {
 
             mDao.deleteAll();
-            mDao.insert(new Transaction(initial));
             return null;
         }
     }

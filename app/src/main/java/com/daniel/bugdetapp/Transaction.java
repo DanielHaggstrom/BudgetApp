@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import org.threeten.bp.*;
+import org.threeten.bp.format.DateTimeFormatter;
 
 @Entity(tableName = "TRANSACTIONS")
 public class Transaction {
@@ -20,11 +21,11 @@ public class Transaction {
 
     @NonNull
     @ColumnInfo(name = "timestamp")
-    private OffsetDateTime timestamp;
+    private String timestamp;
 
     public Transaction(@NonNull float quantity) {
         this.quantity = quantity;
-        this.timestamp = OffsetDateTime.now();
+        this.timestamp = OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public int getKey() {
@@ -40,11 +41,11 @@ public class Transaction {
     }
 
     @NonNull
-    public OffsetDateTime getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(@NonNull OffsetDateTime timestamp) {
+    public void setTimestamp(@NonNull String timestamp) {
         this.timestamp = timestamp;
     }
 }

@@ -24,10 +24,10 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
             Transaction current = mTransactions.get(position);
-            holder.transactionItemView.setText(Float.toString(current.getQuantity()));
+            holder.quantityItemView.setText(Float.toString(current.getQuantity()));
+            holder.timeItemView.setText(current.getTimestamp());
         } else {
             // Covers the case of data not being ready yet.
-            holder.transactionItemView.setText("No transaction");
         }
     }
 
@@ -46,11 +46,13 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
     class TransactionViewHolder extends RecyclerView.ViewHolder {
-        private final TextView transactionItemView;
+        private final TextView quantityItemView;
+        private final TextView timeItemView;
 
         private TransactionViewHolder(View itemView) {
             super(itemView);
-            transactionItemView = itemView.findViewById(R.id.textView);
+            quantityItemView = itemView.findViewById(R.id.textViewQuantity);
+            timeItemView = itemView.findViewById(R.id.textViewTime);
         }
     }
 }
