@@ -1,18 +1,21 @@
 package com.daniel.bugdetapp;
 
-import java.util.Date;
+import org.threeten.bp.*;
+import org.threeten.bp.format.DateTimeFormatter;
 
+import androidx.annotation.NonNull;
 import androidx.room.TypeConverter;
 
 public class Converters {
+    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     @TypeConverter
-    public static Date fromTimestamp(Long value) {
-        return value == null ? null : new Date(value);
+    public static OffsetDateTime toOffsetDateTime(@NonNull String value){
+        return OffsetDateTime.parse(value, formatter);
     }
 
     @TypeConverter
-    public static float dateToTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+    public static String toString(@NonNull OffsetDateTime value){
+        return value.format(formatter);
     }
 }

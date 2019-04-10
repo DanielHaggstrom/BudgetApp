@@ -22,7 +22,6 @@ public class TransactionRepository {
     }
 
     public void insert (Transaction transaction) {
-        Log.e("DEBUG","<----------------- Insert called");
         new insertAsyncTask(mTransactionDao).execute(transaction);
     }
 

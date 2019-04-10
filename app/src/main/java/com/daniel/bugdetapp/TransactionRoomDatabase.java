@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Transaction.class}, version = 1, exportSchema = false)
+@Database(entities = {Transaction.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TransactionRoomDatabase extends RoomDatabase {
 
