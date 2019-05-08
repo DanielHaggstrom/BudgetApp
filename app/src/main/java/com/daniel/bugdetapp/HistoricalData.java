@@ -37,6 +37,23 @@ public class HistoricalData extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_historical_data);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final TransactionListAdapter adapter = new TransactionListAdapter(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mTransactionViewModel.getAll().observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                adapter.setTransactions(transactions);
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -52,7 +69,7 @@ public class HistoricalData extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Transaction word = new Transaction(Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
+            Transaction word = new Transaction(-1 * Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
             mTransactionViewModel.insert(word);
         } else {
             Toast.makeText(

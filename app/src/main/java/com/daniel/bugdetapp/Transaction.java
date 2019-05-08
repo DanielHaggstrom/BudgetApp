@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import org.threeten.bp.*;
-import org.threeten.bp.format.DateTimeFormatter;
 
 @Entity(tableName = "TRANSACTIONS")
 public class Transaction {
@@ -25,7 +24,7 @@ public class Transaction {
 
     public Transaction(@NonNull float quantity) {
         this.quantity = quantity;
-        this.timestamp = OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        this.timestamp = LocalDate.now().toString();
     }
 
     public int getKey() {

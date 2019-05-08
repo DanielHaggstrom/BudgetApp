@@ -26,6 +26,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
             Transaction current = mTransactions.get(position);
             holder.quantityItemView.setText(Float.toString(current.getQuantity()));
             holder.timeItemView.setText(current.getTimestamp());
+            if (position != 0) {
+                Transaction previous = mTransactions.get(position -1);
+                if (previous.getTimestamp().equals(current.getTimestamp())){
+                    holder.timeItemView.setVisibility(View.INVISIBLE);
+                }
+            }
         } else {
             // Covers the case of data not being ready yet.
         }
