@@ -1,10 +1,13 @@
 package com.daniel.bugdetapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +15,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     private final LayoutInflater mInflater;
     private List<Transaction> mTransactions; // Cached copy of transactions
 
-    TransactionListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    TransactionListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+    }
 
     @Override
     public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -26,10 +31,16 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
             Transaction current = mTransactions.get(position);
             holder.quantityItemView.setText(Float.toString(current.getQuantity()));
             holder.timeItemView.setText(current.getTimestamp());
-            if (position != 0) {
+            if (position == 0){
+                holder.timeItemView.setVisibility(View.VISIBLE);
+            }
+            else {
                 Transaction previous = mTransactions.get(position -1);
                 if (previous.getTimestamp().equals(current.getTimestamp())){
                     holder.timeItemView.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    holder.timeItemView.setVisibility(View.VISIBLE);
                 }
             }
         } else {

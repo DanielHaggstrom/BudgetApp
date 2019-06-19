@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 public class HistoricalData extends AppCompatActivity {
 
     public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
@@ -35,6 +37,7 @@ public class HistoricalData extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onResume() {
