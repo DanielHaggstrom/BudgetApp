@@ -3,7 +3,10 @@ package com.daniel.bugdetapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,27 +14,37 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.daniel.bugdetapp";
+
     final private String BASE_AMOUNT = "base_amount";
     final private String CURRENT_WEEK = "current_week";
-    final private String SAVED = "saved";
+    final private String TARGET = "target";
+
     private float base_amount;
     private String currentWeek;
-    private float saved;
     private float target;
+
+    private float balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        base_amount = mPreferences.getFloat(BASE_AMOUNT, 40);
-        currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
-        saved = mPreferences.getFloat(SAVED, 0);
-        target = saved + base_amount;
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        loadSharedPreferences();
+        balance = Logic.getWeekBalance(this.getApplication(), currentWeek);
         if (!Logic.isWeekCorrect(currentWeek)){
-            saved = Logic.getWeekBalance(this.getApplication(), currentWeek, target);
+
+            target = target + balance + base_amount;
+            currentWeek = Logic.getCurrentWeek();
         }
+        TextView funds = findViewById(R.id.show_funds);
+        funds.setText(Float.toString(target + balance) + " €");
+        ProgressBar bar = findViewById(R.id.progressBar);
+        bar.setProgress(Math.round(100* (target + balance)/target));
     }
 
     public void onClick(View view) {
@@ -43,9 +56,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-        preferencesEditor.putString(CURRENT_WEEK, Logic.getCurrentWeek());
-        preferencesEditor.putFloat(SAVED, saved);
+        preferencesEditor.putString(CURRENT_WEEK, currentWeek);
+        preferencesEditor.putFloat(TARGET, target);
+        /*TODO
+        * Add way of changing base amount
+        * */
         preferencesEditor.apply();
+    }
+
+    private void loadSharedPreferences(){
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        base_amount = mPreferences.getFloat(BASE_AMOUNT, 40);
+        currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
+        target = mPreferences.getFloat(TARGET, base_amount);
     }
 
 }

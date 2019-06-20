@@ -8,19 +8,21 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Transaction.class}, version = 2, exportSchema = false)
-public abstract class TransactionRoomDatabase extends RoomDatabase {
+@Database(entities = {Transaction.class, Week.class}, version = 3, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
 
     public abstract TransactionDAO transactionDAO();
 
-    private static TransactionRoomDatabase INSTANCE;
+    public abstract WeekDAO weekDAO();
 
-    public static TransactionRoomDatabase getDatabase(final Context context) {
+    private static AppDatabase INSTANCE;
+
+    public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (TransactionRoomDatabase.class) {
+            synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TransactionRoomDatabase.class, "budget_database")
+                            AppDatabase.class, "budget_database")
                             .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
@@ -43,16 +45,19 @@ public abstract class TransactionRoomDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final TransactionDAO mDao;
+        private final TransactionDAO tDao;
+        private final WeekDAO wDao;
 
-        PopulateDbAsync(TransactionRoomDatabase db) {
-            mDao = db.transactionDAO();
+        PopulateDbAsync(AppDatabase db) {
+            tDao = db.transactionDAO();
+            wDao = db.weekDAO();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
 
-            mDao.deleteAll();
+            tDao.deleteAll();
+            wDao.deleteAll();
             return null;
         }
     }

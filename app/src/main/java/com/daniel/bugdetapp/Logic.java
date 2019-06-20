@@ -3,7 +3,6 @@ package com.daniel.bugdetapp;
 import android.app.Application;
 import org.threeten.bp.*;
 import java.util.List;
-import androidx.lifecycle.LiveData;
 
 public class Logic {
 
@@ -30,20 +29,20 @@ public class Logic {
         return Logic.getCurrentWeekAsTime().toString();
     }
 
-    public static float getWeekBalance(Application application, String weekStart, float target){
-        TransactionRepository mRepository = new TransactionRepository(application);
+    public static float getWeekBalance(Application application, String weekStart){
+        AppRepository mRepository = new AppRepository(application);
         LocalDate start = LocalDate.parse(weekStart);
         LocalDate end = start.plusDays(7);
-        LiveData<List<Transaction>> mWeekTransactions = mRepository.getWeek(weekStart, end.toString());
+        List<Transaction> mWeekTransactions = mRepository.getTransactionsFromWeek(weekStart, end.toString());
         float balance = 0;
-        if (mWeekTransactions.getValue() == null) {
-            return target;
+        if (mWeekTransactions == null) {
+            return 0;
         }
         else {
-            for (int i = 0; i < mWeekTransactions.getValue().size(); i++) {
-                balance += mWeekTransactions.getValue().get(i).getQuantity();
+            for (int i = 0; i < mWeekTransactions.size(); i++) {
+                balance += mWeekTransactions.get(i).getQuantity();
             }
-            return balance + target;
+            return balance;
         }
     }
 }

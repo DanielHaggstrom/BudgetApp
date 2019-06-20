@@ -7,17 +7,16 @@ import androidx.lifecycle.LiveData;
 
 public class TransactionViewModel extends AndroidViewModel {
 
-    private TransactionRepository mRepository;
-
+    private AppRepository mRepository;
     private LiveData<List<Transaction>> mAllTransactions;
 
     public TransactionViewModel (Application application) {
         super(application);
-        mRepository = new TransactionRepository(application);
-        mAllTransactions = mRepository.getAll();
+        mRepository = new AppRepository(application);
+        mAllTransactions = mRepository.getAllTransactions();
     }
 
     LiveData<List<Transaction>> getAll() { return mAllTransactions; }
 
-    public void insert(Transaction transaction) {mRepository.insert(transaction); }
+    public void insert(Transaction transaction) {mRepository.insertTransaction(transaction); }
 }
