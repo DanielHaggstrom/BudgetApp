@@ -30,12 +30,16 @@ public class Week {
         return key;
     }
 
-    public float getQuantity() {
+    public void setKey(int key){
+        this.key = key;
+    }
+
+    public float getBalance() {
         return balance;
     }
 
-    public void setKey(int key){
-        this.key = key;
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     @NonNull

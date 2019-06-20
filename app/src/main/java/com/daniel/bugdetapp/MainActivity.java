@@ -9,6 +9,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,13 +34,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadSharedPreferences();
+        TransactionViewModel mTransactionViewModel;
+        final TransactionListAdapter adapter = new TransactionListAdapter(this);
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mTransactionViewModel.getAll().observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                adapter.setTransactions(transactions);
+            }
+        });
+        balance = Logic.getWeekBalance(mTransactionViewModel, currentWeek);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        loadSharedPreferences();
-        balance = Logic.getWeekBalance(this.getApplication(), currentWeek);
         if (!Logic.isWeekCorrect(currentWeek)){
 
             target = target + balance + base_amount;

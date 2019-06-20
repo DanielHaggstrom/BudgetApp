@@ -34,15 +34,13 @@ public class AppRepository {
     LiveData<List<Week>> getLastsWeeks() { return mLastsWeeks; }
 
 
-    List<Transaction> getTransactionsFromWeek(String weekStart, String weekEnd) {
-        ArrayList<Transaction> answer = new ArrayList<>();
+    LiveData<List<Transaction>> getTransactionsFromWeek(String weekStart, String weekEnd) {
         try {
-            answer = new getWeekAsyncTask(mTransactionDao).execute(weekStart, weekEnd).get();
+            return new getWeekAsyncTask(mTransactionDao).execute(weekStart, weekEnd).get();
         }
         catch (Exception e){
+            return null;
         }
-
-        return answer;
     }
 
     public void insertTransaction(Transaction transaction) {
@@ -83,7 +81,7 @@ public class AppRepository {
         }
     }
 
-    private static class getWeekAsyncTask extends AsyncTask<String, Void, ArrayList<Transaction>> {
+    private static class getWeekAsyncTask extends AsyncTask<String, Void, LiveData<List<Transaction>>> {
 
         private TransactionDAO mAsyncTaskDao;
 
@@ -92,10 +90,8 @@ public class AppRepository {
         }
 
         @Override
-        protected ArrayList<Transaction> doInBackground(final String... params) {
-            ArrayList<Transaction> mList = new ArrayList<>();
-            mList.addAll(mAsyncTaskDao.getWeek(params[0], params[1]));
-            return mList;
+        protected LiveData<List<Transaction>> doInBackground(final String... params) {
+            return mAsyncTaskDao.getWeek(params[0], params[1]);
         }
     }
 }

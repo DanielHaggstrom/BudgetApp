@@ -1,7 +1,9 @@
 package com.daniel.bugdetapp;
 
-import android.app.Application;
-import org.threeten.bp.*;
+import androidx.lifecycle.LiveData;
+
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 public class Logic {
@@ -29,18 +31,17 @@ public class Logic {
         return Logic.getCurrentWeekAsTime().toString();
     }
 
-    public static float getWeekBalance(Application application, String weekStart){
-        AppRepository mRepository = new AppRepository(application);
+    public static float getWeekBalance(TransactionViewModel mTransactionViewModel, String weekStart){
         LocalDate start = LocalDate.parse(weekStart);
         LocalDate end = start.plusDays(7);
-        List<Transaction> mWeekTransactions = mRepository.getTransactionsFromWeek(weekStart, end.toString());
+        LiveData<List<Transaction>> mWeekTransactions = mTransactionViewModel.getWeek(weekStart, end.toString());
         float balance = 0;
-        if (mWeekTransactions == null) {
+        if (mWeekTransactions.getValue() == null) {
             return 0;
         }
         else {
-            for (int i = 0; i < mWeekTransactions.size(); i++) {
-                balance += mWeekTransactions.get(i).getQuantity();
+            for (int i = 0; i < mWeekTransactions.getValue().size(); i++) {
+                balance += mWeekTransactions.getValue().get(i).getQuantity();
             }
             return balance;
         }

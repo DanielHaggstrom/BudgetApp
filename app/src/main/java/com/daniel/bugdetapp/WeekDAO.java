@@ -8,7 +8,9 @@ import androidx.room.Query;
 
 import java.util.List;
 
-public interface WeekDAO extends Dao {
+@Dao
+public interface WeekDAO {
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Week week);
 

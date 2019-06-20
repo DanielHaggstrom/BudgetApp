@@ -17,7 +17,7 @@ public interface TransactionDAO {
     LiveData<List<Transaction>> getAll();
 
     @Query("SELECT * from TRANSACTIONS WHERE timestamp BETWEEN :weekStart AND :weekEnd ORDER BY `key` DESC")
-    List<Transaction> getWeek(String weekStart, String weekEnd);
+    LiveData<List<Transaction>> getWeek(String weekStart, String weekEnd);
 
     @Query("DELETE FROM TRANSACTIONS")
     void deleteAll();

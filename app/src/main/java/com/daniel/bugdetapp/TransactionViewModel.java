@@ -19,4 +19,6 @@ public class TransactionViewModel extends AndroidViewModel {
     LiveData<List<Transaction>> getAll() { return mAllTransactions; }
 
     public void insert(Transaction transaction) {mRepository.insertTransaction(transaction); }
+
+    LiveData<List<Transaction>> getWeek(String weekStart, String weekEnd) { return mRepository.getTransactionsFromWeek(weekStart, weekEnd); }
 }
