@@ -3,6 +3,7 @@ package com.daniel.bugdetapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Transaction> transactions) {
                 balance = Logic.getWeekBalance(transactions);
+                setTextAndProgress();
             }
         });
     }
@@ -51,10 +53,7 @@ public class MainActivity extends AppCompatActivity {
             target = target + balance + base_amount;
             currentWeek = Logic.getCurrentWeek();
         }
-        TextView funds = findViewById(R.id.show_funds);
-        funds.setText(Float.toString(target + balance) + " €");
-        ProgressBar bar = findViewById(R.id.progressBar);
-        bar.setProgress(Math.round(100* (target + balance)/target));
+        setTextAndProgress();
     }
 
     public void onClick(View view) {
@@ -79,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
         base_amount = mPreferences.getFloat(BASE_AMOUNT, 40);
         currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
         target = mPreferences.getFloat(TARGET, base_amount);
+    }
+
+    private void setTextAndProgress() {
+        TextView funds = findViewById(R.id.show_funds);
+        funds.setText(Float.toString(target + balance) + " €");
+        ProgressBar bar = findViewById(R.id.progressBar);
+        bar.setProgress(Math.round(100* (target + balance)/target));
     }
 
 }
