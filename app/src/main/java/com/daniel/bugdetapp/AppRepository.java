@@ -2,8 +2,6 @@ package com.daniel.bugdetapp;
 
 import android.app.Application;
 import android.os.AsyncTask;
-
-import java.util.ArrayList;
 import java.util.List;
 import androidx.lifecycle.LiveData;
 
@@ -11,6 +9,7 @@ public class AppRepository {
 
     private TransactionDAO mTransactionDao;
     private LiveData<List<Transaction>> mAllTransactions;
+    private LiveData<List<Transaction>> mWeekTransactions;
 
     private WeekDAO mWeekDao;
     private LiveData<List<Week>> mAllWeeks;
@@ -20,6 +19,7 @@ public class AppRepository {
         AppDatabase db = AppDatabase.getDatabase(application);
         mTransactionDao = db.transactionDAO();
         mAllTransactions = mTransactionDao.getAll();
+        mWeekTransactions = mTransactionDao.getWeek(Logic.getCurrentWeek(), Logic.getNextWeek());
         mWeekDao = db.weekDAO();
         mAllWeeks = mWeekDao.getAll();
         mLastsWeeks = mWeekDao.getLasts();
@@ -29,19 +29,14 @@ public class AppRepository {
         return mAllTransactions;
     }
 
+    LiveData<List<Transaction>> getTransactionsFromWeek() {
+        return mWeekTransactions;
+    }
+
     LiveData<List<Week>> getAllWeeks() { return mAllWeeks; }
 
     LiveData<List<Week>> getLastsWeeks() { return mLastsWeeks; }
 
-
-    LiveData<List<Transaction>> getTransactionsFromWeek(String weekStart, String weekEnd) {
-        try {
-            return new getWeekAsyncTask(mTransactionDao).execute(weekStart, weekEnd).get();
-        }
-        catch (Exception e){
-            return null;
-        }
-    }
 
     public void insertTransaction(Transaction transaction) {
         new insertTransactionAsyncTask(mTransactionDao).execute(transaction);

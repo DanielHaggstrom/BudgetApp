@@ -31,17 +31,20 @@ public class Logic {
         return Logic.getCurrentWeekAsTime().toString();
     }
 
-    public static float getWeekBalance(TransactionViewModel mTransactionViewModel, String weekStart){
-        LocalDate start = LocalDate.parse(weekStart);
-        LocalDate end = start.plusDays(7);
-        LiveData<List<Transaction>> mWeekTransactions = mTransactionViewModel.getWeek(weekStart, end.toString());
+    public static String getNextWeek() {
+        LocalDate start = LocalDate.parse(Logic.getCurrentWeekAsTime().toString());
+        LocalDate end = start.plusDays(6); // el comando sql es inclusivo. No queremos incluir el lunes de la semana siguiente
+        return end.toString();
+    }
+
+    public static float getWeekBalance(List<Transaction> transactions){
         float balance = 0;
-        if (mWeekTransactions.getValue() == null) {
+        if (transactions == null) {
             return 0;
         }
         else {
-            for (int i = 0; i < mWeekTransactions.getValue().size(); i++) {
-                balance += mWeekTransactions.getValue().get(i).getQuantity();
+            for (int i = 0; i < transactions.size(); i++) {
+                balance += transactions.get(i).getQuantity();
             }
             return balance;
         }
