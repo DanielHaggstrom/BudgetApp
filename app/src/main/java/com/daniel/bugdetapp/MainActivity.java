@@ -2,6 +2,7 @@ package com.daniel.bugdetapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -82,8 +83,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTextAndProgress() {
         TextView funds = findViewById(R.id.show_funds);
-        funds.setText(Float.toString(target + balance) + " €");
         ProgressBar bar = findViewById(R.id.progressBar);
+        funds.setText(Float.toString(target + balance) + " €");
+        if (target + balance > target * 0.5) {
+            funds.setTextColor(Color.GREEN);
+            bar.setVisibility(View.VISIBLE);
+        }
+        else if (target + balance >= 0) {
+            funds.setTextColor(Color.YELLOW);
+            bar.setVisibility(View.VISIBLE);
+        }
+        else if (target + balance < 0) {
+            funds.setTextColor(Color.RED);
+            bar.setVisibility(View.INVISIBLE);
+        }
         bar.setProgress(Math.round(100* (target + balance)/target));
     }
 
