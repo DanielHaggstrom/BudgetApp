@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FundsViewModel mFundsViewModel;
 
+    private TransactionViewModel mTransactionViewModel;
+
+    public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 setTextAndProgress();
             }
         });
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
     }
 
     @Override
@@ -98,6 +105,26 @@ public class MainActivity extends AppCompatActivity {
             bar.setVisibility(View.INVISIBLE);
         }
         bar.setProgress(Math.round(100* (target + balance)/target));
+    }
+
+    public void launchNewTransaction(View view){
+        Intent intent = new Intent(this, NewTransactionActivity.class);
+        startActivityForResult(intent, NEW_TRANSACTION_ACTIVITY_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Transaction word = new Transaction(-1 * Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
+            mTransactionViewModel.insert(word);
+        } else {
+            Toast.makeText(
+                    getApplicationContext(),
+                    R.string.error_input_data,
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
 
 }

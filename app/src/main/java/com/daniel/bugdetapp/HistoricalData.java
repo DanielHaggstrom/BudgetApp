@@ -1,10 +1,7 @@
 package com.daniel.bugdetapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HistoricalData extends AppCompatActivity {
-
-    public static final int NEW_TRANSACTION_ACTIVITY_REQUEST_CODE = 1;
 
     private TransactionViewModel mTransactionViewModel;
 
@@ -59,25 +54,5 @@ public class HistoricalData extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    public void launchNewTransaction(View view){
-        Intent intent = new Intent(this, NewTransactionActivity.class);
-        startActivityForResult(intent, NEW_TRANSACTION_ACTIVITY_REQUEST_CODE);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Transaction word = new Transaction(-1 * Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
-            mTransactionViewModel.insert(word);
-        } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.error_input_data,
-                    Toast.LENGTH_LONG
-            ).show();
-        }
     }
 }
