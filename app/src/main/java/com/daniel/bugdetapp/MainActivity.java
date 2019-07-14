@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         base_amount = mPreferences.getFloat(BASE_AMOUNT, 40);
         currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
         target = mPreferences.getFloat(TARGET, base_amount);
-    }
+}
 
     private void setTextAndProgress() {
         TextView funds = findViewById(R.id.show_funds);
