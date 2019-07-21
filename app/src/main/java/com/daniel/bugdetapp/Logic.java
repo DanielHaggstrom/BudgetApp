@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 
 import org.threeten.bp.LocalDate;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class Logic {
@@ -41,15 +40,15 @@ public class Logic {
     }
 
     public static float getWeekBalance(List<Transaction> transactions){
-        BigDecimal balance = new BigDecimal(0);
+        float balance = 0;
         if (transactions == null) {
             return 0;
         }
         else {
             for (int i = 0; i < transactions.size(); i++) {
-                balance = balance.add(transactions.get(i).getQuantity());
+                balance += transactions.get(i).getQuantity();
             }
-            return balance.floatValue();
+            return balance;
         }
     }
 

@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import org.threeten.bp.*;
 
-import java.math.BigDecimal;
-
 @Entity(tableName = "TRANSACTIONS")
 public class Transaction {
 
@@ -18,13 +16,13 @@ public class Transaction {
 
     @NonNull
     @ColumnInfo(name = "quantity")
-    private BigDecimal quantity;
+    private float quantity;
 
     @NonNull
     @ColumnInfo(name = "timestamp")
     private String timestamp;
 
-    public Transaction(@NonNull BigDecimal quantity) {
+    public Transaction(@NonNull float quantity) {
         this.quantity = quantity;
         this.timestamp = LocalDate.now().toString();
     }
@@ -33,7 +31,7 @@ public class Transaction {
         return key;
     }
 
-    public BigDecimal getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 

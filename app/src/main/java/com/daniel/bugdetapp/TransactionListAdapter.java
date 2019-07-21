@@ -29,7 +29,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
             Transaction current = mTransactions.get(position);
-            holder.quantityItemView.setText(current.getQuantity().toString() + " €");
+            holder.quantityItemView.setText(Float.toString(current.getQuantity()) + " €");
             holder.timeItemView.setText(current.getTimestamp());
             if (position == 0){
                 holder.timeItemView.setVisibility(View.VISIBLE);
@@ -68,12 +68,14 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     class TransactionViewHolder extends RecyclerView.ViewHolder {
         private final TextView quantityItemView;
         private final TextView timeItemView;
+        private final CardView quantityCardView;
         private final CardView timeCardView;
 
         private TransactionViewHolder(View itemView) {
             super(itemView);
             quantityItemView = itemView.findViewById(R.id.textViewQuantity);
             timeItemView = itemView.findViewById(R.id.textViewTime);
+            quantityCardView = itemView.findViewById(R.id.card_view_quantity);
             timeCardView = itemView.findViewById(R.id.card_view_time);
         }
     }
