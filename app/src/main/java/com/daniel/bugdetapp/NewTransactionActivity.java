@@ -33,6 +33,9 @@ public class NewTransactionActivity extends AppCompatActivity {
                 else if ((mEditTransactionView.getText().toString()).equals(".")){
                     setResult(RESULT_CANCELED, replyIntent);
                 }
+                else if (Logic.getNumberOfDecimals(mEditTransactionView.getText().toString()) > 2) {
+                    setResult(RESULT_CANCELED, replyIntent);
+                }
                 else {
                     String quantity = mEditTransactionView.getText().toString();
                     replyIntent.putExtra(EXTRA_REPLY, quantity);

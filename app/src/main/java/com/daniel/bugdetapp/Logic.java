@@ -1,5 +1,7 @@
 package com.daniel.bugdetapp;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import org.threeten.bp.LocalDate;
@@ -50,7 +52,6 @@ public class Logic {
         }
     }
 
-    /*
     public static int getNumberOfDecimals(String s) {
         int index = -1;
         for (int i = 0; i < s.length(); i++) {
@@ -59,6 +60,9 @@ public class Logic {
                 break;
             }
         }
-
-    }*/
+        if (index == -1){
+            return 0;
+        }
+        return s.length()-index-1;//in order to avoid a off by one error
+    }
 }
