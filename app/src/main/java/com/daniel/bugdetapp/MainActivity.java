@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Transaction word = new Transaction(-1 * Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
+            Transaction word = new Transaction((new BigDecimal(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY))).multiply(new BigDecimal(-1)));
             mTransactionViewModel.insert(word);
         } else {
             Toast.makeText(
