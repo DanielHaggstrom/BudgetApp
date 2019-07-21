@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,11 @@ public class NewTransactionActivity extends AppCompatActivity {
                 Intent replyIntent = new Intent();
                 if (TextUtils.isEmpty(mEditTransactionView.getText())){
                     setResult(RESULT_CANCELED, replyIntent);
-                } else {
+                }
+                else if ((mEditTransactionView.getText().toString()).equals(".")){
+                    setResult(RESULT_CANCELED, replyIntent);
+                }
+                else {
                     String quantity = mEditTransactionView.getText().toString();
                     replyIntent.putExtra(EXTRA_REPLY, quantity);
                     setResult(RESULT_OK, replyIntent);
