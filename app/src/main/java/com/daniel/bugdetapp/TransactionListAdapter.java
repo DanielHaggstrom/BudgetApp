@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import androidx.cardview.widget.CardView;
@@ -29,7 +30,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
             Transaction current = mTransactions.get(position);
-            holder.quantityItemView.setText(Float.toString(current.getQuantity()) + " €");
+            holder.quantityItemView.setText(current.getQuantity()
+                    .setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
             holder.timeItemView.setText(current.getTimestamp());
             if (position == 0){
                 holder.timeItemView.setVisibility(View.VISIBLE);

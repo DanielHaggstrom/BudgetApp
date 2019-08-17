@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     final private String CURRENT_WEEK = "current_week";
     final private String TARGET = "target";
 
-    private float base_amount;
+    private String base_amount_save;
+    private BigDecimal base_amount;
     private String currentWeek;
-    private float target;
+    private String target_save;
+    private BigDecimal target;
 
-    private float balance;
+    private BigDecimal balance;
 
     private FundsViewModel mFundsViewModel;
 
@@ -58,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         if (!Logic.isWeekCorrect(currentWeek)){
-            target = target + balance + base_amount;
+            target = target.add(balance.add(base_amount));
             currentWeek = Logic.getCurrentWeek();
         }
-        setTextAndProgress();
+        //setTextAndProgress();
     }
 
     public void onClick(View view) {
@@ -74,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         SharedPreferences.Editor preferencesEditor = mPreferences.edit();
         preferencesEditor.putString(CURRENT_WEEK, currentWeek);
-        preferencesEditor.putFloat(TARGET, target);
+        preferencesEditor.putString(TARGET, target.
+                setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString());
         /*TODO
         * Add way of changing base amount
         * */
@@ -83,28 +88,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadSharedPreferences(){
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        base_amount = mPreferences.getFloat(BASE_AMOUNT, 40);
+        //Preferences.edit().clear().commit();
+        base_amount_save = mPreferences.getString(BASE_AMOUNT, "40.00");
+        base_amount = new BigDecimal(base_amount_save).setScale(2, BigDecimal.ROUND_HALF_EVEN);
         currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
-        target = mPreferences.getFloat(TARGET, base_amount);
+        target_save = mPreferences.getString(TARGET,base_amount_save);
+        target = new BigDecimal(target_save).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 }
 
     private void setTextAndProgress() {
         TextView funds = findViewById(R.id.show_funds);
         ProgressBar bar = findViewById(R.id.progressBar);
-        funds.setText(Float.toString(target + balance) + " €");
-        if (target + balance > target * 0.5) {
+        BigDecimal current = target.add(balance).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        funds.setText(current.toString() + " €");
+        if (current.compareTo(target.multiply(new BigDecimal("0.5"))
+                .setScale(2, BigDecimal.ROUND_HALF_EVEN)) > 0) {
             funds.setTextColor(Color.GREEN);
             bar.setVisibility(View.VISIBLE);
         }
-        else if (target + balance >= 0) {
+        else if (current.compareTo(BigDecimal.ZERO) >= 0) {
             funds.setTextColor(Color.YELLOW);
             bar.setVisibility(View.VISIBLE);
         }
-        else if (target + balance < 0) {
+        else if (current.compareTo(BigDecimal.ZERO) < 0) {
             funds.setTextColor(Color.RED);
             bar.setVisibility(View.INVISIBLE);
         }
-        bar.setProgress(Math.round(100* (target + balance)/target));
+        bar.setProgress(Math.round(100*Float.parseFloat(
+                current.divide(target, BigDecimal.ROUND_HALF_EVEN).toPlainString())));
     }
 
     public void launchNewTransaction(View view){
@@ -116,8 +127,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Transaction word = new Transaction(-1 * Float.parseFloat(data.getStringExtra(NewTransactionActivity.EXTRA_REPLY)));
-            mTransactionViewModel.insert(word);
+            BigDecimal minusOne = BigDecimal.valueOf(-1)
+                    .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal convertedData = new BigDecimal(
+                    data.getStringExtra(NewTransactionActivity.EXTRA_REPLY))
+                    .setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            Transaction newTransaction = new Transaction(minusOne.multiply(convertedData));
+            mTransactionViewModel.insert(newTransaction);
         } else {
             Toast.makeText(
                     getApplicationContext(),
