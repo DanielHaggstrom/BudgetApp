@@ -12,9 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light"
         tools:replace="android:appComponentFactory">
+        <activity android:name=".ModifyTransactionActivity"></activity>
         <activity
             android:name=".HistoricalData"
-            android:label="@string/title_activity_historical_data"></activity>
+            android:label="@string/title_activity_historical_data" />
         <activity
             android:name=".NewTransactionActivity"
             android:label="@string/title_activity_new_transaction" />

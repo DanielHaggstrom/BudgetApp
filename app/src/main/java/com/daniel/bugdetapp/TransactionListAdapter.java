@@ -1,10 +1,12 @@
 package com.daniel.bugdetapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,8 +29,19 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
     @Override
-    public void onBindViewHolder(TransactionViewHolder holder, int position) {
+    public void onBindViewHolder(final TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
+            holder.quantityCardView.setLongClickable(true);
+            holder.quantityCardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ModifyTransactionActivity.class);
+                    double message = Double.parseDouble(holder.quantityItemView.getText().toString());
+                    intent.putExtra("Modify", message);
+                    startActivity(intent);
+                    return true;
+                }
+            });
             Transaction current = mTransactions.get(position);
             holder.quantityItemView.setText(current.getQuantity()
                     .setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
