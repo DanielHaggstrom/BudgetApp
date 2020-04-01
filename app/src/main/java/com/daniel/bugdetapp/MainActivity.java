@@ -21,18 +21,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
-    private String sharedPrefFile = "com.daniel.bugdetapp";
 
-    final private String BASE_AMOUNT = "base_amount";
     final private String CURRENT_WEEK = "current_week";
+    final private String INCOME = "income";
     final private String TARGET = "target";
-
-    private String base_amount_save;
-    private BigDecimal base_amount;
+    final private String BALANCE = "balance";
     private String currentWeek;
-    private String target_save;
+    private BigDecimal income;
     private BigDecimal target;
-
     private BigDecimal balance;
 
     private FundsViewModel mFundsViewModel;
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         if (!Logic.isWeekCorrect(currentWeek)){
-            target = target.add(balance.add(base_amount));
+            target = target.add(balance.add(income));
             currentWeek = Logic.getCurrentWeek();
         }
         //setTextAndProgress();
@@ -80,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         preferencesEditor.putString(CURRENT_WEEK, currentWeek);
         preferencesEditor.putString(TARGET, target.
                 setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString());
+        preferencesEditor.putString(BALANCE, balance.
+                setScale(2, BigDecimal.ROUND_HALF_EVEN).toPlainString());
+
         /*TODO
         * Add way of changing base amount
         * */
@@ -87,14 +86,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadSharedPreferences(){
+        String sharedPrefFile = "com.daniel.bugdetapp";
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         //Preferences.edit().clear().commit();
-        base_amount_save = mPreferences.getString(BASE_AMOUNT, "40.00");
-        base_amount = new BigDecimal(base_amount_save).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        String income_as_string = mPreferences.getString(INCOME, "40.00");
+        income = new BigDecimal(income_as_string).setScale(2, BigDecimal.ROUND_HALF_EVEN);
         currentWeek = mPreferences.getString(CURRENT_WEEK, Logic.getCurrentWeek());
-        target_save = mPreferences.getString(TARGET,base_amount_save);
-        target = new BigDecimal(target_save).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-}
+        String target_as_string = mPreferences.getString(TARGET, income_as_string);
+        target = new BigDecimal(target_as_string).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        String balance_as_string = mPreferences.getString(BALANCE, "0.00");
+        balance = new BigDecimal(balance_as_string).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    }
 
     private void setTextAndProgress() {
         TextView funds = findViewById(R.id.show_funds);
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     .setScale(2, BigDecimal.ROUND_HALF_EVEN);
             Transaction newTransaction = new Transaction(minusOne.multiply(convertedData));
             mTransactionViewModel.insert(newTransaction);
+            balance.add(minusOne.multiply(convertedData));
         } else {
             Toast.makeText(
                     getApplicationContext(),
