@@ -1,7 +1,9 @@
 package com.daniel.bugdetapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,19 +34,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(final TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
             holder.quantityCardView.setLongClickable(true);
+            final Transaction current = mTransactions.get(position);
             holder.quantityCardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    Log.d("longpress", holder.quantityItemView.getText().toString());
                     Intent intent = new Intent(v.getContext(), ModifyTransactionActivity.class);
-                    double message = Double.parseDouble(holder.quantityItemView.getText().toString());
+                    String message = Logic.moneyToString(holder.quantityItemView.getText().toString());
                     intent.putExtra("Modify", message);
-                    startActivity(intent);
+                    intent.putExtra("ID", current.getKey());
+                    ((Activity) v.getContext()).startActivityForResult(intent, 1);
                     return true;
                 }
             });
-            Transaction current = mTransactions.get(position);
-            holder.quantityItemView.setText(current.getQuantity()
-                    .setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
+            holder.quantityItemView.setText(current.getQuantity().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
             holder.timeItemView.setText(current.getTimestamp());
             if (position == 0){
                 holder.timeItemView.setVisibility(View.VISIBLE);
@@ -66,7 +69,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
     }
 
-    void setTransactions(List<Transaction> transactions){
+    void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
         notifyDataSetChanged();
     }

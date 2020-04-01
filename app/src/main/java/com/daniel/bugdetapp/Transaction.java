@@ -37,6 +37,10 @@ public class Transaction {
         return quantity;
     }
 
+    public void setQuantity(@NonNull BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
     public void setKey(int key){
         this.key = key;
     }

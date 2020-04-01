@@ -2,6 +2,8 @@ package com.daniel.bugdetapp;
 
 import android.app.Application;
 import android.os.AsyncTask;
+
+import java.math.BigDecimal;
 import java.util.List;
 import androidx.lifecycle.LiveData;
 
@@ -46,6 +48,10 @@ public class AppRepository {
         new insertWeekAsyncTask(mWeekDao).execute(week);
     }
 
+    public void modify(Transaction transaction) {
+        new modifyTransactionAsyncTask(mTransactionDao).execute(transaction);
+    }
+
     private static class insertTransactionAsyncTask extends AsyncTask<Transaction, Void, Void> {
 
         private TransactionDAO mAsyncTaskDao;
@@ -87,6 +93,21 @@ public class AppRepository {
         @Override
         protected LiveData<List<Transaction>> doInBackground(final String... params) {
             return mAsyncTaskDao.getWeek(params[0], params[1]);
+        }
+    }
+
+    private static class modifyTransactionAsyncTask extends AsyncTask<Transaction, Void, Void> {
+
+        private TransactionDAO mAsyncTaskDao;
+
+        modifyTransactionAsyncTask(TransactionDAO dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Transaction... params) {
+            mAsyncTaskDao.update(params[0]);
+            return null;
         }
     }
 }

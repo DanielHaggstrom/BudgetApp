@@ -66,4 +66,8 @@ public class Logic {
         }
         return s.length()-index-1;//in order to avoid a off by one error
     }
+
+    public static String moneyToString(String s) {
+        return s.substring(1, s.length() - 1);
+    }
 }
