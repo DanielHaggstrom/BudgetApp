@@ -2,6 +2,7 @@ package com.daniel.bugdetapp;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -106,6 +107,7 @@ public class AppRepository {
 
         @Override
         protected Void doInBackground(Transaction... params) {
+            Log.d("update", "AsyncTask called");
             mAsyncTaskDao.update(params[0]);
             return null;
         }

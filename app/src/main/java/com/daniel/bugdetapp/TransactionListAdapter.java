@@ -43,6 +43,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                     String message = Logic.moneyToString(holder.quantityItemView.getText().toString());
                     intent.putExtra("Modify", message);
                     intent.putExtra("ID", current.getKey());
+                    Log.d("update", "Sending ID of " + String.valueOf(current.getKey()));
+                    intent.putExtra("TIME", current.getTimestamp());
                     ((Activity) v.getContext()).startActivityForResult(intent, 1);
                     return true;
                 }

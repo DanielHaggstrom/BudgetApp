@@ -59,7 +59,8 @@ public class HistoricalData extends AppCompatActivity {
 
         if (requestCode == MODIFY_TRANSACTION_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             int id = data.getIntExtra("ID", 0);
-            BigDecimal amount = new BigDecimal(data.getStringExtra("com.example.android.bugdetapp.REPLY-DOUBLE"));
+            String time = data.getStringExtra("TIME");
+            BigDecimal amount = new BigDecimal(data.getStringExtra("AMOUNT"));
             BigDecimal minusOne = BigDecimal.valueOf(-1).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             Transaction newTransaction = new Transaction(minusOne.multiply(amount));
             newTransaction.setKey(id);

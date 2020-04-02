@@ -12,7 +12,7 @@ import androidx.room.Update;
 @Dao
 public interface TransactionDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Transaction transaction);
 
     @Query("SELECT * from TRANSACTIONS ORDER BY `key` DESC")
@@ -24,7 +24,7 @@ public interface TransactionDAO {
     @Query("DELETE FROM TRANSACTIONS")
     void deleteAll();
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Transaction transaction);
 
 }

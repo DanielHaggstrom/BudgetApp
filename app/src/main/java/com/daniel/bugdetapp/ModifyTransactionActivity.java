@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,8 +14,6 @@ public class ModifyTransactionActivity extends AppCompatActivity {
     private EditText mEditTransactionView;
     public static final String EXTRA_REPLY =
             "com.example.android.bugdetapp.REPLY-MODIFY";
-    public static final String DOUBLE_REPLY =
-            "com.example.android.bugdetapp.REPLY-DOUBLE";
     public int id;
 
     @Override
@@ -22,6 +21,12 @@ public class ModifyTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_transaction);
         Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Log.d("update", "ModifyTransactionActivity " + key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+            }
+        }
         mEditTransactionView = findViewById(R.id.editText);
         mEditTransactionView.setHint(intent.getStringExtra("Modify"));
         this.id = intent.getIntExtra("ID", 0);
@@ -40,8 +45,8 @@ public class ModifyTransactionActivity extends AppCompatActivity {
         }
         else {
             String quantity = mEditTransactionView.getText().toString();
-            replyIntent.putExtra(EXTRA_REPLY, this.id);
-            replyIntent.putExtra(DOUBLE_REPLY, quantity);
+            replyIntent.putExtra("ID", this.id);
+            replyIntent.putExtra("AMOUNT", quantity);
             setResult(RESULT_OK, replyIntent);
         }
         finish();
