@@ -1,10 +1,14 @@
 package com.daniel.bugdetapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,11 +31,25 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
     @Override
-    public void onBindViewHolder(TransactionViewHolder holder, int position) {
+    public void onBindViewHolder(final TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
-            Transaction current = mTransactions.get(position);
-            holder.quantityItemView.setText(current.getQuantity()
-                    .setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
+            holder.quantityCardView.setLongClickable(true);
+            final Transaction current = mTransactions.get(position);
+            holder.quantityCardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d("longpress", holder.quantityItemView.getText().toString());
+                    Intent intent = new Intent(v.getContext(), ModifyTransactionActivity.class);
+                    String message = Logic.moneyToString(holder.quantityItemView.getText().toString());
+                    intent.putExtra("Modify", message);
+                    intent.putExtra("ID", current.getKey());
+                    Log.d("update", "Sending ID of " + String.valueOf(current.getKey()));
+                    intent.putExtra("TIME", current.getTimestamp());
+                    ((Activity) v.getContext()).startActivityForResult(intent, 1);
+                    return true;
+                }
+            });
+            holder.quantityItemView.setText(current.getQuantity().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString() + " €");
             holder.timeItemView.setText(current.getTimestamp());
             if (position == 0){
                 holder.timeItemView.setVisibility(View.VISIBLE);
@@ -53,7 +71,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
     }
 
-    void setTransactions(List<Transaction> transactions){
+    void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
         notifyDataSetChanged();
     }
